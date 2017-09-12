@@ -31,5 +31,6 @@ def main():
     g = game.Game( [getTestingDeck() for i in range(numPlayers)] )
     print(g.getDispText())
 
-#if __name__ == "__main__":
-main()
+if __name__ == "__main__":
+    main()
+    input()

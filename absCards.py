@@ -22,6 +22,15 @@ class Card():
     def getDispText(self, private = False):
         return "("+str(self._cost)+"G) "+self._name
 
+    #GAMEPLAY
+    #returns true if can play with the specified paramers.
+    #assumes unspecified paraters are sufficient
+    def canPlay(self, gold = 100):
+        return gold >= self.getCost()
+
+    #abstract
+    def play(self):
+        raise NotImplementedError
 
 #ABSTRACT
 class PermCard(Card):
@@ -31,6 +40,5 @@ class PermCard(Card):
     def __init__(self, name, cost):
         super().__init__(name, cost)
 
-    def play(self, target, costPayed):
-        target.add(self.spawnClass(self, costPayed))
-    
+    def play(self, targetArea, costPayed):
+        targetArea.add(self.spawnClass(self, costPayed))

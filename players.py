@@ -70,14 +70,26 @@ class Player():
                 p.turn()
 
     def canPlay(self, card):
-        return card.getCost() <= self._gold.priv()
+        return card.canPlay(self._gold)
 
     #TODO: assumes all cards are permanent cards! Stop that!
     def play(self, card, costPaid):
         card.play(self._play,costPaid)
-        self.gold.add(-1*costPaid,True) 
+        self._gold.add(-1*costPaid,True) 
+
+    def spy(self, agent : Agent):
+        self._clues.add(agent.spy(), False, agent)
+
+    def thieve(self, agent : Agent):
+        self._gold.add(agent.thieve(), False, agent)
+
+    def reveal(self, agent : Agent):
+        agent.reveal()
+        self._clues.reveal(agent)
+        self._gold.reveal(agent)
 
     #INNER CLASSES
+
     class pubPrivRes():
 
         def __init__(self, startVal, pubStartVal = None):
@@ -98,12 +110,12 @@ class Player():
             self._priv += val
             self._pub += val * int(pub)
             if not pub and source != None:
-                self._tracked_priv[source] += val
+                self._tracked_priv[id(source)] += val
 
         #make all tracked private changes from a source public
         def reveal(self, source):
-            self._pub += self._tracked_priv[source]
-            del self._tracked_priv[source]
+            self._pub += self._tracked_priv[id(source)]
+            del self._tracked_priv[id(source)]
 
         def getDispText(self, accronym, private):
             return (str(self.priv()) if private else "?") + accronym +" ("+str(self.pub())+ accronym + " Public)"
