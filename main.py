@@ -1,6 +1,7 @@
 import cards
 import game
 from decks import Deck 
+from textBasedPlayerControllers import TextBasedPC
 
 #GAME SETTING CONSTANTS
 numPlayers = 2
@@ -28,8 +29,9 @@ def getTestingDeck():
 
 def main():
     printTitle()
-    g = game.Game( [getTestingDeck() for i in range(numPlayers)] )
-    print(g.getDispText())
+    g = game.Game( [getTestingDeck() for i in range(numPlayers)], [TextBasedPC for i in range(numPlayers)] )
+    while g.main():
+        printTitle()
 
 if __name__ == "__main__":
     main()

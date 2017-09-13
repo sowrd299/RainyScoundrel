@@ -1,8 +1,14 @@
 from permanents import Permanent 
+import actions
+
+spyName = "Spy"
+thieveName = "Thieve"
+attackName = "Attack"
 
 class Agent(Permanent):
 
     typeName = "Agent"
+    scrollsName = "Scrolls"
 
     def __init__(self, card, costSpent):
         super().__init__(card, costSpent)
@@ -10,7 +16,7 @@ class Agent(Permanent):
         self._dead = False
 
     #GETTERS AND SETTERS
-    def getExhausted(self):
+    def isExhausted(self):
         return self._exh
 
     def exhaust(self):
@@ -32,6 +38,7 @@ class Agent(Permanent):
     def getCombatVal(self):
         return self._card._thiefVal
 
+    """ #Removed:
     def canSpy(self):
         return not self.getExhausted()
 
@@ -40,8 +47,14 @@ class Agent(Permanent):
 
     def canAttack(self):
         return not self.getExhausted()
+    """
 
-    def die(self, cause):
+    def getActions(self, gold = 100):
+        if not self.isExhausted():
+            return [] #TODO: CREATE SPY, THIEF AND COMBAT ACTIONS
+        return []
+
+    def die(self, cause : str):
         self._dead = True
 
     def isDead(self):
@@ -62,32 +75,46 @@ class Agent(Permanent):
 
     def _act(self, counter):
         self.exhaust()
-        exec("self."+counter+"+=1")
+        self._counters[counter] += 1
 
     def spy(self):
-        self._act("_scrolls")
+        self._act(self.scrollsName)
         return self.getSpyVal()
 
     def thieve(self):
-        self._act("_purses")
+        self._act(self.pursesName)
         return self.getThiefVal()
 
     #COMBAT
-    #note: attack devided into three methods to allow as much 
-    #flexibility with special abilities as possible
+    #note: attack devided up to allow as much 
+    #       flexibility with special abilities as possible
 
+    #the main attack function; runs all of combat.
+    #returns list of units killed
     def attack(self, other):
-        osc = other._combat(self.getCombatScore(other))
-        self._combat(other,osc)
+        #CS
+        cs = self._getCombatScore(other)
+        osc = other._getCombatScore(self)
+        #Deathlist
+        deathList = []
+        deathList = self._getKilled(other, cs, ocs, deathList)
+        deathList = other._getKilled(self, ocs, cs, deathList)
+        #Postcombat
+        self._postCombat(other, deathList)
+        other._postCombat(self, deathList)
+        #Return
+        return deathList
 
-    #Returns the specific value to be used in combat
-    def getCombatScore(self,other):
+    #returns score to be used in a specific combat
+    def _getCombatScore(self, other):
         return self.getCombatVal()
 
-    #helper function for carrying out combat
-    #returns Combat Score
-    def _defend(self, other, othercs):
-        cs = self.getCombatScore(other)
-        if scs <= ocs:
-            self.die("combat")
-        return cs 
+    #appends people who will be killed to the deathList
+    def _getKilled(self, other, cs, othercs, deathList):
+        if cs <= ocs:
+            desthList.append(self)
+        return deathList
+
+    #ability operturnity only
+    def _postCombat(self, other, deathList):
+        pass
