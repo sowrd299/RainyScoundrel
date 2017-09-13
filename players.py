@@ -6,6 +6,10 @@ from actions import ActionOutcome
 
 class Player():
 
+    #RESOURCE ACCRONYMS
+    goldAcc = "G"
+    cluesAcc = " Clues"
+
     def __init__(self, name, start_gold, start_hand, deck):
         self._name = name
         self._gold = self.pubPrivRes(start_gold) #primary resources
@@ -38,12 +42,12 @@ class Player():
     #displays the player's resources, agenst, haunts, public hand and hand
     #allows assinging keys to display with any item in any of those lists
     #private: toggles on private view (hand, private resources, hidden permanents)
-    def getDispText(self, private : bool, keyList = {id : object}):
+    def getDispText(self, private : bool, keyList : {id : object} = {}):
 
         def listCards(cards, cols = 2):
             text = ""
             num = 0
-            l = len(cards) - 1 #last index
+            l = len(cards) #last index
             for card in sorted(cards):
                 text += "\t" 
                 if id(card) in keyList.keys():
@@ -56,7 +60,7 @@ class Player():
             return text
 
         #HEADER
-        text = "~~"+self._name + "~ " +self._gold.getDispText("G", private) + " ~ " + self._clues.getDispText("Clues", private)+" ~~\n"
+        text = "~~"+self._name + "~ " +self._gold.getDispText(self.goldAcc, private) + " ~ " + self._clues.getDispText(self.cluesAcc, private)+" ~~\n"
         #CARDS
         text += "AGENTS:\n"
         text += listCards(self.getAgents())

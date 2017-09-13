@@ -12,7 +12,7 @@ class Agent(Permanent):
 
     def __init__(self, card, costSpent):
         super().__init__(card, costSpent)
-        self._exh = False
+        self._exh = True #GAME LOGIC: spawn exhausted
         self._dead = False
 
     #GETTERS AND SETTERS
@@ -51,7 +51,7 @@ class Agent(Permanent):
 
     def getActions(self, gold = 100):
         if not self.isExhausted():
-            return [] #TODO: CREATE SPY, THIEF AND COMBAT ACTIONS
+            return [ self.ThieveAction(self) ] #TODO: CREATE SPY, THIEF AND COMBAT ACTIONS
         return []
 
     def die(self, cause : str):
@@ -62,8 +62,8 @@ class Agent(Permanent):
 
     #IO
 
-    def getDisplayText(self):
-        text = Permanent.getDisplayText(self)
+    def getDispText(self, private):
+        text = super().getDispText(private)
         if self._exh:
             text = "["+text+"]"
         return text
@@ -118,3 +118,10 @@ class Agent(Permanent):
     #ability operturnity only
     def _postCombat(self, other, deathList):
         pass
+
+    #INNER CLASSES
+
+    #the thief action
+    class ThieveAction(actions.Action):
+        def __init__(self, thief):
+            super().__init__(thieveName, thief.thieve, [], False, "gold")

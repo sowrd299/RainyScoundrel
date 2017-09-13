@@ -3,6 +3,7 @@ from absPlayerControllers import PlayerController
 class TextBasedPC(PlayerController):
 
     def chooseFromCards(self, choices, endTurn = True):
+        choices.sort()
         count = iter(range(len(choices)+1))
         print(self._game.getDispText( {"keyList" : {id(card) : next(count) for card in choices}} ))
         if endTurn:

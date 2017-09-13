@@ -25,6 +25,7 @@ def getTestingDeck():
     r.append(cards.AgentCard("Pick-Pocket",1,0,1,2))
     r.append(cards.AgentCard("Thug",2,1,3,1))
     r.append(cards.AgentCard("Big Thug",3,1,4,2))
+    r.append(cards.HauntCard("Dark Alley",3,3,1))
     return Deck(r)
 
 def main():

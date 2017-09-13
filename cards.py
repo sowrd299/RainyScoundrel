@@ -35,3 +35,4 @@ class HauntCard(PermCard):
         text = PermCard.getDispText(self)+" "
         text += str(self._shroudVal) + "Sh|"
         text += str(self._genVal) + "Gp"
+        return text

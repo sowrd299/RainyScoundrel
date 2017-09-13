@@ -12,17 +12,26 @@ class Haunt(Permanent):
         self._shroud = card._shroudVal
 
     #GETTERS AND SETTERS
+
     def getShroud(self):
         return self._shroud
 
     def getGenVal(self):
-        return self.card._genVal
+        return self._card._genVal
 
     def isDead(self):
         return self._shroud <= 0 #GAME LOGIC
 
     def getActions(self, gold = 100):
         return []
+
+    #IO
+
+    def getDispText(self, private):
+        text = super().getDispText(private).split(' ')
+        if private:
+            text[-1] = str(self.getShroud()) + "/" + text[-1]
+        return ' '.join(text)
 
     #GAME LOGIC
 

@@ -1,5 +1,6 @@
 from players import Player 
 from absCards import Card
+from pieces import Piece
 import actions
 
 #A CLASS TO REPRESENT ONE GAME
@@ -42,7 +43,7 @@ class Game():
         for p in self._players:
              if not p is player:
                  text += p.getDispText(False,  **(displayArgs)) + "\n"
-        text += player.getDispText(True, **(displayArgs[id(player)] if id(player) in displayArgs.keys() else dict()))        
+        text += player.getDispText(True, **(displayArgs))
         return text
 
     #GAME LOGIC
@@ -56,10 +57,10 @@ class Game():
         ap = self._getActivePlayer()
         #select an action 
         while choice == None:
-            _actions = { id(choice) : choice.getActions() for choice in ap.getAllActiveCards() }
+            _actions = { id(choice) : choice.getActions(ap._gold.priv()) for choice in ap.getAllActiveCards() } #TODO: STOP VIOLATING PRIVACY HERE
             choice = apc.chooseFromCards(self.getCardsThat( lambda x : len(_actions[id(x)]) > 0 ))
         #handle choice selections
-        if isinstance(choice , Card):
+        if isinstance(choice , Piece):
             action = apc.chooseFromList(_actions[id(choice)])
             self._act(action, ap, apc)
         #handle command strings

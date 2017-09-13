@@ -1,23 +1,20 @@
 import actions
+from pieces import Piece
 
 #A file containing card-related abstract classes
 
 #ABSTRACT
-class Card():
+class Card(Piece):
     def __init__(self, name, cost):
         self._name = name
         self._cost = cost
 
     #GETTERS AND SETTERS
+    def getName(self):
+        return self._name
     def getCost(self):
         return self._cost
 
-    #RELATIONALS
-    def __eq__(self, other):
-        return isinstance(other, Card) and self._name == other._name
-
-    def __lt__(self, other):
-        return self._cost < other._cost or (self._cost == other._cost and self._name < other._name)
     
     #IO
     #Text to display the card in-game
@@ -47,14 +44,14 @@ class Card():
         
         def __init__(self, card, gold):
             self._card = card
-            pred = lambda x : self._card.canPlay(x) and x < gold
+            pred = lambda x : self._card.canPlay(x) and x <= gold
             dispText = "How much do you want to spend (cost is "+str(self._card._cost)+"G, "+str(gold)+"G available)"
-            args = [actions.ActionArg("Spend",int,pred,dispText = dispText)]
-            super().__init__("Play", card.play, args, False, "ERROR IF THIS OUTCOME TYPE USED")
+            self._spend_arg = actions.ActionArg("Spend",int,pred,dispText = dispText)
+            super().__init__("Play", card.play, [self._spend_arg], False, "ERROR IF THIS OUTCOME TYPE USED")
 
         def go(self):
             super().go()
-            return actions.ActionOutcome(public = True, gold = -1*self._card._cost, discardList = [self._card])
+            return actions.ActionOutcome(public = True, gold = -1*self._spend_arg.getVal(), discardList = [self._card])
 
 #ABSTRACT
 class PermCard(Card):
