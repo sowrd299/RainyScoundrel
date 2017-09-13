@@ -36,3 +36,6 @@ class TextBasedPC(PlayerController):
                     print("That number is not valid.")
             except TypeError:
                 print("You must input a number.")
+
+    #TODO: Implement reports
+    #TODO: Implement choosing to prevent

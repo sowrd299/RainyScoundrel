@@ -121,6 +121,8 @@ class Agent(Permanent):
 
     #INNER CLASSES
 
+    #TODO: Implement attacking and spying
+
     #the thief action
     class ThieveAction(actions.Action):
         def __init__(self, thief):

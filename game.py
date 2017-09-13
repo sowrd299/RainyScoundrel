@@ -63,6 +63,7 @@ class Game():
         if isinstance(choice , Piece):
             action = apc.chooseFromList(_actions[id(choice)])
             self._act(action, ap, apc)
+            #TODO: report result of act to players
         #handle command strings
         else:
             if choice == self.actionEndTurn:
