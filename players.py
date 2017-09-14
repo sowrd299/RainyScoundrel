@@ -1,4 +1,4 @@
-from agents import Agent 
+import agents #cannot import agent: causes import loop
 from haunts import Haunt 
 from absCards import Card 
 from collections import defaultdict
@@ -10,14 +10,16 @@ class Player():
     goldAcc = "G"
     cluesAcc = " Clues"
 
+    #NOTE: Most begining of game setup done here
     def __init__(self, name, start_gold, start_hand, deck):
         self._name = name
         self._gold = self.pubPrivRes(start_gold) #primary resources
         self._clues = self.pubPrivRes(0) #victory points
-        self._hand = list(deck.draw(start_hand)) #cards in hand
         self._pub_hand = list() #TODO: Implement card reveal/public hands
         self._play = list() #agents in play
         self._deck = deck
+        deck.shuffle()
+        self._hand = list(deck.draw(start_hand)) #cards in hand
 
     #GETTERS AND SETTERS
 
@@ -29,7 +31,7 @@ class Player():
         return self._play + self._hand
 
     def getAgents(self):
-        return self._get_perms_of_class(Agent)
+        return self._get_perms_of_class(agents.Agent)
 
     def getHaunts(self):
         return self._get_perms_of_class(Haunt)
@@ -68,9 +70,11 @@ class Player():
         text += listCards(self.getHaunts())
         text += "\nPUBLIC HAND: (cards may no longer be in hand)\n"
         text += listCards(self._pub_hand)
+        text += "HAND:\n"
         if private:
-            text += "\nHAND:\n"
             text += listCards(self._hand)
+        else:
+            text += "\t~~"+str(len(self._hand))+" Cards~~"
         return text
 
     #GAME LOGIC
@@ -79,15 +83,18 @@ class Player():
         for haunt in self.getHaunts():
             self._gold.add(haunt.gen(), False, haunt)
 
-    def draw(self, n):
+    def draw(self, n = 1):
         self._hand.extend(self._deck.draw(n))
+
+    def discard(self, card):
+        self._hand.remove(card)
 
     def turn(self):
         for p in self._play:
             if p.turn:
                 p.turn()
 
-    """ #removed:
+    """ #REMOVED
     def canPlay(self, card):
         return card.canPlay(self._gold)
 
@@ -100,26 +107,34 @@ class Player():
 
     def thieve(self, agent : Agent):
         self._gold.add(agent.thieve(), False, agent)
-    """
-
     #process the outcomes of an action taken by an agent
-    #TODO: find a more expanable version of this system
-    def processOutcome(self, oc : ActionOutcome):
-        self._gold.add(oc.gold, oc.public) #TODO: include source!
+    def processOutcomes(self, oc : ActionOutcome):
+        self._gold.add(oc.gold, oc.public) 
         self._clues.add(oc.clues, oc.public)
         for card in (c for c in oc.deathList if c in self._play):
             card.die()
             oc.remove(card)
         self._play += oc.spawnList
-        for card in oc.discardList: #TODO: build more robust discrad system
+        for card in oc.discardList: 
             self._hand.remove(card)
-            oc.discardList.remove(card) #TODO: support deathList style multiple player shared list?
+            oc.discardList.remove(card) 
         for agent in oc.revealList:
             self.reveal(agent)
         self.draw(oc.drawCount)
-        #TODO: add a "publicies" effect, that adds cards to the pub-hand
+    """
+        
+    def gainResource(self, resource : str, public, source, val):
+        if resource == self.goldAcc:
+            self._gold.add(val, public, source)
+        if resource == self.cluesAcc:
+            self._clues.add(val, public, source)
 
-    def reveal(self, agent : Agent):
+    def spawn(self, permanent):
+        self._play.append(permanent)
+
+    #TODO: add remaining methods from Action Results
+
+    def reveal(self, agent):
         agent.reveal()
         self._clues.reveal(agent)
         self._gold.reveal(agent)

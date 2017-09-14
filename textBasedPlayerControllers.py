@@ -21,9 +21,11 @@ class TextBasedPC(PlayerController):
         choice = input(prompt+": ")
         try:
             return choices[int(choice)]
-        except TypeError:
+        except ValueError:
+            print("That is not a valid index.")
             return None
         except IndexError:
+            print("That index is out of range.")
             return None
 
     def chooseNumber(self, prompt, pred):
@@ -34,7 +36,7 @@ class TextBasedPC(PlayerController):
                     return int(choice)
                 else:
                     print("That number is not valid.")
-            except TypeError:
+            except ValueError:
                 print("You must input a number.")
 
     #TODO: Implement reports

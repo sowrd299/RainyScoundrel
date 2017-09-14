@@ -42,7 +42,7 @@ class Game():
             player = self._getActivePlayer()
         for p in self._players:
              if not p is player:
-                 text += p.getDispText(False,  **(displayArgs)) + "\n"
+                 text += p.getDispText(False,  **(displayArgs)) + "\n\n"
         text += player.getDispText(True, **(displayArgs))
         return text
 
@@ -79,6 +79,7 @@ class Game():
         if pc == None:
             pc = self._getActivePlayerController()
         #ARGS
+        #get values for the action's arguments from the player(s)
         for arg in action.getArgs():
             if arg.getFriendly():
                 pc.chooseArg(arg)
@@ -87,14 +88,23 @@ class Game():
                     if not p is pc:
                         p.chooseArg
         #RESOLVE THE ACTION
-        oc = action.go()
-        deathList = oc.deathList
-        player.processOutcome(oc)
-        for p in self._players:
-            p.processOutcome(actions.ActionOutcome(True, deathList = deathList))
+        #TODO: create a more efficient system for getting the 
+        #       right results to the right players, without iterating
+        oc = action.go() #OC: a list of action results
+        i = self._players.index(player) #start with the player making the action, and proceed in order
+        while oc:
+            not_completed = []
+            for result in oc:
+                if not result.resolve(self._players[i]):
+                    #oc.remove(result) #bugged in python iterator implementation... I think
+                    not_completed.append(result)
+            oc = not_completed
+            i = (i+1) % len(self._players)
+
 
     def _next_turn(self):
         self._turn = (self._turn + 1) % len(self._players)
         ap = self._getActivePlayer()
         ap.turn()
         ap.gen()
+        ap.draw()

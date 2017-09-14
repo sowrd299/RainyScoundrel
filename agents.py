@@ -126,4 +126,4 @@ class Agent(Permanent):
     #the thief action
     class ThieveAction(actions.Action):
         def __init__(self, thief):
-            super().__init__(thieveName, thief.thieve, [], False, "gold")
+            super().__init__(thieveName, thief.thieve, [], False, "gold", thief)

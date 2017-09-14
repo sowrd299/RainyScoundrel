@@ -1,4 +1,5 @@
 import actions
+import actionResults
 from pieces import Piece
 
 #A file containing card-related abstract classes
@@ -47,11 +48,10 @@ class Card(Piece):
             pred = lambda x : self._card.canPlay(x) and x <= gold
             dispText = "How much do you want to spend (cost is "+str(self._card._cost)+"G, "+str(gold)+"G available)"
             self._spend_arg = actions.ActionArg("Spend",int,pred,dispText = dispText)
-            super().__init__("Play", card.play, [self._spend_arg], False, "ERROR IF THIS OUTCOME TYPE USED")
+            super().__init__("Play", card.play, [self._spend_arg], False, "ERROR IF THIS OUTCOME TYPE USED", self._card)
 
         def go(self):
-            super().go()
-            return actions.ActionOutcome(public = True, gold = -1*self._spend_arg.getVal(), discardList = [self._card])
+            return super().go() + actions.ActionOutcome(public = True, gold = -1*self._spend_arg.getVal(), discardList = [self._card])
 
 #ABSTRACT
 class PermCard(Card):
@@ -63,12 +63,13 @@ class PermCard(Card):
 
     def play(self, targetArea, costPayed):
         targetArea.append(self.spawnClass(self, costPayed))
+        return targetArea
 
     class PlayAction(Card.PlayAction):
 
         def __init__(self, card : Card, gold):
             super().__init__(card, gold)
-            self._outcomeType = "spawnList"
+            self._outcomeType = actionResults.SpawnListResult
 
         def go(self):
             #create and insert the spawn list
@@ -77,7 +78,4 @@ class PermCard(Card):
             argSpawnList.setVal(spawnList)
             self._args.insert(0, argSpawnList)
             #spawn the permanent:
-            oc = super().go()
-            #add the spawn list to the outcome, and return it
-            oc.spawnList = spawnList
-            return oc
+            return super().go()

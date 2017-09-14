@@ -1,6 +1,13 @@
 THINGS WE KNOW ABOUT THIS WORLD SO FAR
--roughly late colonial/victorian time equivilant
+-roughly late colonial/early victorian time equivilant
 -rival criminal/underworld organizations are forced to operate in shadows
+    -unable to know much about eachother
 -large cities exist, and are likely our main setting
--some people are some how able to speak to the trees
-    -plausibly some manor or ocult, outland faction
+
+-magic exists, though is viewed ocult and strange
+    -is based on The Seven(?) Mystic Tongues:
+        -ancient and  powerful languages
+        -the Second(?) Mystic Tongue allows one to warp others preceptions of reality
+            -including invisablity and other cloaking spells
+        -the Fourth(?) Mystic Tongue allows one to speak with trees
+        -the Sixth(?) Mystic Tongue allows one to speak to and control fire

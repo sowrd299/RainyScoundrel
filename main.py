@@ -7,7 +7,7 @@ from textBasedPlayerControllers import TextBasedPC
 numPlayers = 2
 
 #text display
-title = "~~THIEVES, SCOUNDRLES and SPIES~~"
+title = "~~THIEVES, SPIES and SCOUNDRLES~~"
 subtitle = "A game of covert opperations in the underbelly of the city."
 
 def printTitle():

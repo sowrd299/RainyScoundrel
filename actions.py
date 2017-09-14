@@ -45,8 +45,22 @@ class ActionArg():
         return self._val
 
 
+#DEPRICARED, 
 #Carries data from card action to player
-#TODO: improve scalability of this system
+#Included to minimize refactoring with change in
+#   from Action OC to Action Result systems
+def ActionOutcome(public = True, source = None, **outcomes):
+    import actionResults #here included to 1: prevent unnecessary import
+                         #                 2: be removed easily if this function every no longer needed
+    def makeResulte(k,v): #needed to prevent a scope bug between eval and comprensions
+        p = public
+        ar = actionResults
+        s = source
+        return eval("ar."+k[0].upper()+k[1:]+"Result(s,p,v)")
+
+    return [ makeResulte(k,v) for k,v in outcomes.items() ]
+
+''' #REMOVED
 class ActionOutcome():
     
     def __init__(self, public = True, gold = 0, clues = 0, deathList = [], spawnList = [], discardList = [], revealList = [], drawCount = 0):
@@ -58,19 +72,21 @@ class ActionOutcome():
         self.discardList = discardList #cards in hand no longer in hand
         self.revealList = revealList #hidden permanents to be revealed
         self.drawCount = drawCount #number of cards to draw
+'''
 
 
 #An attaction (usually attached to a specific card)
 #   that a player can preform
 class Action():
 
-    def __init__(self, name : str, action, args : [ActionArg], public : bool, outcomeType : str):
+    def __init__(self, name : str, action, args : [ActionArg], public : bool, outcomeType : type, source = None):
         self._name = name #the name of the action
         self._action = action #the function that resolves the action
         self._args = args #the list of arguments to the action
         self._public = public #if the action is public
         self._outcomeType = outcomeType #what type of result the action has
-                                        #   can be: "gold", "clues", "deathList", "spawnList"
+                                        #should be child class or Action Result
+        self._source = None #the piece responsible for the action
 
     def getDispText(self):
         return self._name
@@ -81,7 +97,10 @@ class Action():
     #formats the output from the raw output of the action
     #   to an ActionOutcome object
     def _formatOutcome(self, oc):
-        return eval("ActionOutcome(self._public, "+self._outcomeType+" = oc)")
+        if isinstance(self._outcomeType, str): #DEPRICATED
+            return eval("ActionOutcome(self._public, "+self._outcomeType+" = oc)")
+        else: #...all new code should take this branch:
+            return [self._outcomeType(self._public, self._source, oc)]
 
     #Preforms the action
     #Raises "UnfilledActionArgError" if premature
@@ -97,7 +116,7 @@ class PreventableAction(Action):
     _disclaimer = " (can be prevented)" 
     _prevOutcome = ActionOutcome(False)
 
-    def __init__(self, name, action, preventedAction, args, public, outcomeType):
+    def __init__(self, name, action, preventedAction, args, public, outcomeType, source = None):
         Action.__init__(self, name, action, args, public, outcomeType)
         self._prevArg = ActionArg(haunts.preventName, haunts.Haunt, friendly = False, opt = True, dispText = self._promptText)
         self._prevAction = preventedAction # the action to preform when the main action is prevented
