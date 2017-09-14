@@ -93,7 +93,7 @@ class Game():
         oc = action.go() #OC: a list of action results
         i = self._players.index(player) #start with the player making the action, and proceed in order
         while oc:
-            not_completed = []
+            not_completed = [] #unresolved effects that are meant for other players
             for result in oc:
                 if not result.resolve(self._players[i]):
                     #oc.remove(result) #bugged in python iterator implementation... I think

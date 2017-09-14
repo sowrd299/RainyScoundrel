@@ -132,8 +132,9 @@ class Player():
     def spawn(self, permanent):
         self._play.append(permanent)
 
-    #TODO: add remaining methods from Action Results
-
+    def kill(self, permanent):
+        permanent.die()
+    
     def reveal(self, agent):
         agent.reveal()
         self._clues.reveal(agent)

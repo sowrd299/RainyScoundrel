@@ -1,13 +1,39 @@
 THINGS WE KNOW ABOUT THIS WORLD SO FAR
+
+Basis:
 -roughly late colonial/early victorian time equivilant
 -rival criminal/underworld organizations are forced to operate in shadows
     -unable to know much about eachother
 -large cities exist, and are likely our main setting
 
+Magic:
 -magic exists, though is viewed ocult and strange
-    -is based on The Seven(?) Mystic Tongues:
-        -ancient and  powerful languages
-        -the Second(?) Mystic Tongue allows one to warp others preceptions of reality
-            -including invisablity and other cloaking spells
-        -the Fourth(?) Mystic Tongue allows one to speak with trees
-        -the Sixth(?) Mystic Tongue allows one to speak to and control fire
+-is based on The Seven(?) Mystic Tongues:
+    -ancient and  powerful languages
+    -the Second(?) Mystic Tongue allows one to warp others preceptions of reality
+        -including invisablity and other cloaking spells
+    -the Fourth(?) Mystic Tongue allows one to speak with trees
+    -the Sixth(?) Mystic Tongue allows one to speak to and control fire
+
+Factions:
+-operate outside the public eye
+-operate in seporate underground circcles, as they do not inherently know about the others where-abouts
+-have motivation to learn about eachother
+-have motivatin for the others not to know about them
+-are not above some manor of theft
+-are not above engaging eachother in violence
+
+-some types of factions we may encounter:
+    -police-like organizations:
+        -undercover police
+        -some manor of vigilante, private eye, mercencary, type things...
+        -the private policy of a powerful company
+    -criminal organizations:
+        -smugglers or pirates
+        -general organized crime/cindicates
+    -ocult organizations:
+        -outland/witchlike covens
+        -cults dedicated to some appocoplypse or elder god like entity
+    -other:
+        -spies or a foreign state
+        -riteous secret order of the welthy and/or intelectual and/or magically inclided

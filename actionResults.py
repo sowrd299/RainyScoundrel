@@ -57,17 +57,14 @@ class PieceListResult(ActionResult):
 #NOTE: CURRENTLY ONLY SUPPORTS AGENTS
 class DeathListResult(PieceListResult):
     def _resolve(self, piece, player):
-        #TODO: ADD THIS METHOD TO PLAYER
         player.kill(piece)
 
 class SpawnListResult(PieceListResult):
     def _resolve(self, piece, player):
-        #TODO: you know the drill
         player.spawn(piece)
 
 class DiscardListResult(PieceListResult):
     def _resolve(self, piece, player):
-        #TODO: yup, add it to player
         player.discard(piece)
 
 class RevealListResult(PieceListResult):

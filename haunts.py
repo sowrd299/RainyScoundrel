@@ -19,11 +19,11 @@ class Haunt(Permanent):
     def getGenVal(self):
         return self._card._genVal
 
+    def die(self):
+        self._shroud = 0
+
     def isDead(self):
         return self._shroud <= 0 #GAME LOGIC
-
-    def getActions(self, gold = 100):
-        return []
 
     #IO
 

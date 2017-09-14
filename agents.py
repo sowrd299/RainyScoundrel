@@ -13,7 +13,6 @@ class Agent(Permanent):
     def __init__(self, card, costSpent):
         super().__init__(card, costSpent)
         self._exh = True #GAME LOGIC: spawn exhausted
-        self._dead = False
 
     #GETTERS AND SETTERS
     def isExhausted(self):
@@ -53,12 +52,6 @@ class Agent(Permanent):
         if not self.isExhausted():
             return [ self.ThieveAction(self) ] #TODO: CREATE SPY, THIEF AND COMBAT ACTIONS
         return []
-
-    def die(self, cause : str):
-        self._dead = True
-
-    def isDead(self):
-        return self._dead
 
     #IO
 

@@ -15,6 +15,7 @@ class Permanent(Piece):
         self._card = card
         self._spent = costSpent
         self._counters = defaultdict(int)
+        self._dead = False
 
     def getName(self):
         return self._card._name
@@ -34,11 +35,15 @@ class Permanent(Piece):
             text = "~"+text+"~"
         return text
 
-    def isDead(self):
-        raise NotImplementedError
+    def die(self):
+        self._dead = True
 
-    def getActions(self):
-        raise NotImplementedError
+    def isDead(self):
+        return self._dead
+
+    #TODO: make other "getActions" also use kwargs
+    def getActions(self, **kwargs):
+        return []
 
     def turn(self):
         pass
